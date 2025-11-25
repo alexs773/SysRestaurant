@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<BorderPane fx:id="bp" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pe.edu.upeu.sysrestaurant.controller.MainGuiController">
+    <top>
+        <MenuBar fx:id="menuBarFx" BorderPane.alignment="CENTER">
+        </MenuBar>
+    </top>
+    <center>
+        <StackPane BorderPane.alignment="CENTER">
+            <VBox fx:id="welcomePane" alignment="CENTER" maxWidth="520" spacing="15" style="-fx-background-color: linear-gradient(to bottom right,#fefefe,#f0f0f0); -fx-padding: 40; -fx-background-radius: 20;">
+                <ImageView fitHeight="90.0" fitWidth="229.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../img/asd.png" />
+                    </image>
+                </ImageView>
+                <Label text="Bienvenido a SysRestaurante" textFill="#2b2b2b">
+                    <font>
+                        <Font size="24.0" />
+                    </font>
+                </Label>
+                <Label style="-fx-text-fill: #555555; -fx-font-size: 14px;" text="Selecciona una opciÃ³n del menÃº superior para comenzar a gestionar comidas o pedidos." textAlignment="CENTER" wrapText="true" />
+            </VBox>
+            <TabPane fx:id="tabPaneFx" tabClosingPolicy="UNAVAILABLE" />
+        </StackPane>
+    </center>
+</BorderPane>
+

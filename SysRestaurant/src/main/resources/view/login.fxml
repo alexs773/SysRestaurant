@@ -1,0 +1,83 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane style="-fx-background-color: linear-gradient(to bottom right,#211d1c,#3a322d);" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pe.edu.upeu.sysrestaurant.controller.LoginController">
+    <children>
+        <VBox alignment="CENTER" prefHeight="520" prefWidth="400" spacing="20" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
+            <VBox alignment="CENTER" spacing="12">
+                <StackPane prefHeight="120" prefWidth="120">
+                    <Circle fill="#2b241e" radius="60" stroke="#ffea00" strokeWidth="3" />
+                    <VBox alignment="CENTER" spacing="5">
+                  <children>
+                     <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                        <image>
+                           <Image url="@../img/asd.png" />
+                        </image>
+                     </ImageView>
+                  </children>
+                    </VBox>
+                </StackPane>
+                <Label text="RESTAURANT LOGIN" textFill="#ffef5b">
+                    <font>
+                        <Font size="16" />
+                    </font>
+                </Label>
+            </VBox>
+
+            <VBox prefWidth="300" spacing="18" style="-fx-background-color: #2b241e; -fx-padding: 30; -fx-background-radius: 18; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.55),20,0,0,12);">
+                <VBox spacing="6">
+                    <Label text="Usuario" textFill="#f8f8f8">
+                        <font>
+                            <Font size="14" />
+                        </font>
+                    </Label>
+                    <HBox alignment="CENTER_LEFT" spacing="10" style="-fx-border-color: #ffef5b; -fx-border-radius: 999; -fx-padding: 6 12;">
+                  <ImageView fitHeight="20.0" fitWidth="14.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../img/candado.png" />
+                     </image>
+                  </ImageView>
+                        <Label textFill="#ffef5b">
+                            <font>
+                                <Font name="Segoe UI Symbol" size="18" />
+                            </font>
+                        </Label>
+                        <TextField fx:id="txtUsuario" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-prompt-text-fill: #b1b1b1; -fx-border-color: transparent;" />
+                    </HBox>
+                </VBox>
+
+                <VBox spacing="6">
+                    <Label text="ContraseÃ±a" textFill="#f8f8f8">
+                        <font>
+                            <Font size="14" />
+                        </font>
+                    </Label>
+                    <HBox alignment="CENTER_LEFT" spacing="10" style="-fx-border-color: #ffef5b; -fx-border-radius: 999; -fx-padding: 6 12;">
+                  <ImageView fitHeight="14.0" fitWidth="14.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../img/clave.png" />
+                     </image>
+                  </ImageView>
+                        <Label textFill="#ffef5b">
+                            <font>
+                                <Font name="Segoe UI Symbol" size="18" />
+                            </font>
+                        </Label>
+                        <PasswordField fx:id="txtClave" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-prompt-text-fill: #b1b1b1; -fx-border-color: transparent;" />
+                    </HBox>
+                </VBox>
+
+                <VBox spacing="10">
+                    <Button fx:id="btnIngresar" onAction="#login" prefHeight="40" style="-fx-background-color: #ffef5b; -fx-text-fill: #2b241e; -fx-font-weight: bold; -fx-background-radius: 999;" text="INGRESAR" />
+                    <Button onAction="#cerrar" prefHeight="36" prefWidth="78.0" style="-fx-background-color: transparent; -fx-border-color: #ffef5b; -fx-border-radius: 999; -fx-text-fill: #ffef5b;" text="SALIR" />
+                </VBox>
+            </VBox>
+        </VBox>
+    </children>
+</AnchorPane>
+
