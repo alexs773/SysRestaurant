@@ -5,6 +5,8 @@ import javafx.geometry.Pos;
 import javafx.scene.control.DatePicker;
 import javafx.scene.layout.StackPane;
 import net.sf.jasperreports.engine.JasperPrint;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import pe.edu.upeu.sysrestaurant.service.IVentaService;
@@ -14,6 +16,9 @@ import java.time.format.DateTimeFormatter;
 
 @Controller
 public class ReporteController {
+
+    private static final Logger logger = LoggerFactory.getLogger(ReporteController.class);
+
     @FXML
     DatePicker txtFechaI, txtFechaF;
     private JasperPrint jasperPrint;
@@ -26,7 +31,7 @@ public class ReporteController {
     @FXML
     void generarReporte(){
         if (txtFechaI.getValue() == null || txtFechaF.getValue() == null) {
-            System.out.println("Debe seleccionar ambas fechas.");
+            logger.warn("Debe seleccionar ambas fechas para generar el reporte");
             return;
         }
         String fechaI = txtFechaI.getValue().format(fechaFmt);
@@ -38,7 +43,7 @@ public class ReporteController {
             paneRepo.getChildren().add(viewer);
             StackPane.setAlignment(viewer, Pos.CENTER);
         } catch (Exception e) {
-            System.out.println("VER:" + e.getMessage());
+            logger.error("Error al generar reporte de ventas", e);
         }
     }
 }

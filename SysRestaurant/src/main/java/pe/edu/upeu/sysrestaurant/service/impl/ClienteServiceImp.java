@@ -37,7 +37,7 @@ public class ClienteServiceImp extends CrudGenericoServiceImp<Cliente,String> im
                 listarclientes.add(data);
             }
         } catch (Exception e) {
-            logger.error("Error durante la operaciÃ³n", e);
+            logger.error("Error durante la operación", e);
         }
         return listarclientes;
     }

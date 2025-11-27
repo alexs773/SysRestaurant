@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package pe.edu.upeu.sysrestaurant.model;
 
 import jakarta.persistence.Basic;
@@ -23,9 +19,7 @@ public class Perfil {
     @Basic(optional = false)
     @Column(name = "id_perfil", nullable = false)
     private Long idPerfil;
-//@Size(max = 20)
     private String nombre;
-//@Size(max = 6)
     private String codigo;
 }
 

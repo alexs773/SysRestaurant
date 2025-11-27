@@ -16,27 +16,23 @@ public class ReportAlert {
     }
 
     public void show() {
-        Alert alert = new Alert(Alert.AlertType.NONE); // Tipo NONE para no mostrar botones predeterminados
+        Alert alert = new Alert(Alert.AlertType.NONE);
         alert.setTitle("Visualizar Reporte");
         alert.setHeaderText(null);
 
-        // Crear el JRViewerFX
         JRViewerFX viewerFX = new JRViewerFX(jasperPrint);
-        viewerFX.setPrefSize(800, 400); // Ajusta estos valores segÃºn necesites
+        viewerFX.setPrefSize(800, 400);
 
-        // Crear un contenedor para el JRViewerFX
         StackPane stackPane = new StackPane(viewerFX);
-        alert.getDialogPane().setContent(stackPane); // Establecer contenido del Alert
+        alert.getDialogPane().setContent(stackPane);
 
-        // Agregar botÃ³n de cerrar
         ButtonType closeButton = new ButtonType("Cerrar");
         alert.getButtonTypes().add(closeButton);
 
-        // Mostrar el alert
-        alert.setOnCloseRequest(event -> alert.close()); // Manejar el cierre
+        alert.setOnCloseRequest(event -> alert.close());
         alert.showAndWait().ifPresent(response -> {
             if (response == closeButton) {
-                alert.close(); // Cerrar el alert al hacer clic en el botÃ³n "Cerrar"
+                alert.close();
             }
         });
     }

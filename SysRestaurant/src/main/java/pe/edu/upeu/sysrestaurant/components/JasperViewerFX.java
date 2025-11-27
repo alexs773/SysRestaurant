@@ -20,7 +20,6 @@ import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperPrintManager;
-//import net.sf.jasperreports.engine.export.JRXlsExporter;
 import net.sf.jasperreports.engine.export.ooxml.JRXlsxExporter;
 import net.sf.jasperreports.export.SimpleExporterInput;
 import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
@@ -29,12 +28,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.List;
 
-/**
- * An simple approach to JasperViewer in JavaFX.
- *
- * @author Gustavo Fragoso
- * @version 3.3
- */
 public class JasperViewerFX extends Dialog<Void>{
 
     private Button btnPrint;
@@ -70,9 +63,6 @@ public class JasperViewerFX extends Dialog<Void>{
         currentPage = new SimpleIntegerProperty(this, "currentPage", 1);
     }
 
-    // ***********************************************
-    // Scene and button actions
-    // ***********************************************
     private BorderPane createContentPane() {
         btnPrint = new Button(null, new ImageView(getClass().getResource("printer.png").toExternalForm()));
         btnSave = new Button(null, new ImageView(getClass().getResource("save.png").toExternalForm()));
@@ -122,12 +112,10 @@ public class JasperViewerFX extends Dialog<Void>{
         menu.getChildren().addAll(btnPrint, btnSave, btnFirstPage, btnBackPage, txtPage,
                 lblReportPages, btnNextPage, btnLastPage, btnZoomIn, btnZoomOut);
 
-        // This imageview will preview the pdf inside scrollpane
         report = new ImageView();
         report.setFitHeight(imageHeight);
         report.setFitWidth(imageWidth);
 
-        // Centralizing the ImageView on Scrollpane
         Group contentGroup = new Group();
         contentGroup.getChildren().add(report);
 
@@ -147,37 +135,18 @@ public class JasperViewerFX extends Dialog<Void>{
         return root;
     }
 
-    // ***********************************************
-    // Properties
-    // ***********************************************
-
-    /**
-     * Set the currentPage property value
-     * @param pageNumber Page number
-     */
     public void setCurrentPage(int pageNumber) {
         currentPage.set(pageNumber);
     }
 
-    /**
-     * Get the currentPage property value
-     * @return Current page value
-     */
     public int getCurrentPage() {
         return currentPage.get();
     }
 
-    /**
-     * Get the currentPage property
-     * @return currentPage property
-     */
     public SimpleIntegerProperty currentPageProperty() {
         return currentPage;
     }
 
-    // ***********************************************
-    // Button Action
-    // ***********************************************
     private void printAction() {
         btnPrint.setOnAction(event -> {
             try {
@@ -211,10 +180,6 @@ public class JasperViewerFX extends Dialog<Void>{
         });
     }
 
-    /**
-     * When the user reach first or last page he cannot go forward or backward
-     * @param pageNumber Page number
-     */
     private void disableUnnecessaryButtons(int pageNumber) {
         boolean isFirstPage = (pageNumber == 1);
         boolean isLastPage = (pageNumber == reportPages);
@@ -225,15 +190,6 @@ public class JasperViewerFX extends Dialog<Void>{
         btnLastPage.setDisable(isLastPage);
     }
 
-    // ***********************************************
-    // Export Utilities
-    // ***********************************************
-
-    /**
-     * Choose the right export method for each file extension
-     * @param file File
-     * @param extension File extension
-     */
     private void exportTo(File file, String extension) {
         switch (extension) {
             case "*.pdf":
@@ -256,9 +212,6 @@ public class JasperViewerFX extends Dialog<Void>{
         }
     }
 
-    /**
-     * Export report to html file
-     */
     public void exportToHtml(File file) {
         try {
             JasperExportManager.exportReportToHtmlFile(jasperPrint, file.getPath());
@@ -267,9 +220,6 @@ public class JasperViewerFX extends Dialog<Void>{
         }
     }
 
-    /**
-     * Export report to Pdf file
-     */
     public void exportToPdf(File file) {
         try {
             JasperExportManager.exportReportToPdfFile(jasperPrint, file.getPath());
@@ -278,9 +228,6 @@ public class JasperViewerFX extends Dialog<Void>{
         }
     }
 
-    /**
-     * Export report to old Microsoft Excel file
-     */
     public void exportToXls(File file) {
         try {
             JRXlsxExporter exporter = new JRXlsxExporter();
@@ -292,9 +239,6 @@ public class JasperViewerFX extends Dialog<Void>{
         }
     }
 
-    /**
-     * Export report to Microsoft Excel file
-     */
     public void exportToXlsx(File file) {
         try {
             JRXlsxExporter exporter = new JRXlsxExporter();
@@ -306,9 +250,6 @@ public class JasperViewerFX extends Dialog<Void>{
         }
     }
 
-    /**
-     * Export report to XML file
-     */
     public void exportToXml(File file) {
         try {
             JasperExportManager.exportReportToXmlFile(jasperPrint, file.getPath(), false);
@@ -317,15 +258,7 @@ public class JasperViewerFX extends Dialog<Void>{
         }
     }
 
-    // ***********************************************
-    // Image related methods
-    // ***********************************************
 
-    /**
-     * Renderize page to image
-     * @param pageNumber Page number
-     * @throws JRException
-     */
     private Image pageToImage(int pageNumber) {
         try {
             float zoom = (float) 1.33;
@@ -339,10 +272,6 @@ public class JasperViewerFX extends Dialog<Void>{
         return null;
     }
 
-    /**
-     * Render specific page on screen
-     * @param pageNumber
-     */
     private void renderPage(int pageNumber) {
         setCurrentPage(pageNumber);
         disableUnnecessaryButtons(pageNumber);
@@ -350,10 +279,6 @@ public class JasperViewerFX extends Dialog<Void>{
         report.setImage(pageToImage(pageNumber));
     }
 
-    /**
-     * Scale image from ImageView
-     * @param factor Zoom factor
-     */
     public void zoom(double factor) {
         report.setScaleX(report.getScaleX() + factor);
         report.setScaleY(report.getScaleY() + factor);
@@ -361,11 +286,6 @@ public class JasperViewerFX extends Dialog<Void>{
         report.setFitWidth(imageWidth + factor);
     }
 
-    /**
-     * Load report from JasperPrint
-     * @param title Dialog title
-     * @param jasperPrint JasperPrint object
-     */
     public void viewReport(String title, JasperPrint jasperPrint) {
         this.jasperPrint = jasperPrint;
 

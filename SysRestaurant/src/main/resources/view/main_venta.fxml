@@ -42,7 +42,7 @@
                         <Insets left="5.0" />
                      </GridPane.margin>
                   </TextField>
-                  <Label text="DirecciÃ³n" GridPane.columnIndex="4">
+                  <Label text="Dirección" GridPane.columnIndex="4">
                      <GridPane.margin>
                         <Insets left="5.0" />
                      </GridPane.margin>
@@ -85,7 +85,7 @@
                         <Insets right="5.0" />
                      </GridPane.margin></TextField>
                   <Label text="Comida:" GridPane.columnIndex="1" />
-                  <Label text="CÃ³digo:" GridPane.columnIndex="2" />
+                  <Label text="Código:" GridPane.columnIndex="2" />
                   <Label text="Stock:" GridPane.columnIndex="3" />
                   <Label text="Cantidad:" GridPane.columnIndex="4" />
                   <Label text="Precio:" GridPane.columnIndex="5" />

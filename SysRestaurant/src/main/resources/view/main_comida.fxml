@@ -79,7 +79,7 @@
                                                 <Insets right="5.0" />
                                             </GridPane.margin>
                                         </TextField>
-                                        <Label text="DescripciÃ³n" GridPane.rowIndex="4">
+                                        <Label text="Descripción" GridPane.rowIndex="4">
                                             <GridPane.margin>
                                                 <Insets left="5.0" />
                                             </GridPane.margin>

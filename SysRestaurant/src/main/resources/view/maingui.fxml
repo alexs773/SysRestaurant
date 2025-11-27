@@ -23,7 +23,7 @@
                         <Font size="24.0" />
                     </font>
                 </Label>
-                <Label style="-fx-text-fill: #555555; -fx-font-size: 14px;" text="Selecciona una opciÃ³n del menÃº superior para comenzar a gestionar comidas o pedidos." textAlignment="CENTER" wrapText="true" />
+                <Label style="-fx-text-fill: #555555; -fx-font-size: 14px;" text="Selecciona una opción del menú superior para comenzar a gestionar comidas o pedidos." textAlignment="CENTER" wrapText="true" />
             </VBox>
             <TabPane fx:id="tabPaneFx" tabClosingPolicy="UNAVAILABLE" />
         </StackPane>

@@ -12,6 +12,9 @@ import pe.edu.upeu.sysrestaurant.repository.ICrudGenericoRepository;
 import pe.edu.upeu.sysrestaurant.repository.VentaRepository;
 import pe.edu.upeu.sysrestaurant.service.IVentaService;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.sql.DataSource;
 import java.io.File;
 import java.nio.file.Path;
@@ -21,8 +24,10 @@ import java.sql.SQLException;
 import java.util.HashMap;
 
 @RequiredArgsConstructor
- @Service
+@Service
 public class VentaServiceImp extends CrudGenericoServiceImp<Venta, Long> implements IVentaService {
+
+    private static final Logger logger = LoggerFactory.getLogger(VentaServiceImp.class);
 
     @Autowired
     private DataSource dataSource;
@@ -38,32 +43,25 @@ public class VentaServiceImp extends CrudGenericoServiceImp<Venta, Long> impleme
     public File getFile(String filex) {
         File newFolder = new File("jasper");
         String ruta = newFolder.getAbsolutePath();
-        //CAMINO = Paths.get(ruta+"/"+"reporte1.jrxml");
         Path CAMINO = Paths.get(ruta + "/" + filex);
-        System.out.println("Llegasss Ruta 2:" +
-                CAMINO.toAbsolutePath().toFile());
+        logger.debug("Ruta del archivo jasper: {}", CAMINO.toAbsolutePath());
         return CAMINO.toFile();
     }
     @Override
     public JasperPrint runReport(Long idv) throws JRException, SQLException
     {
-        // Verificar si la venta existe
         if (!ventaRepository.existsById(idv)) {
             throw new IllegalArgumentException("La venta con id " + idv + " no existe");
         }
         HashMap<String, Object> param = new HashMap<>();
-        // Obtener ruta de la imagen
         String imgen = getFile("logoupeu.png").getAbsolutePath();
         String urljasper = compileSubreport("detallev.jrxml");
-        // Agregar parÃ¡metros
         param.put("idventa", idv);
         param.put("imagenurl", imgen);
         param.put("urljasper", urljasper);
-        // Cargar el diseÃ±o del informe
         JasperDesign jdesign =
                 JRXmlLoader.load(getFile("comprobante.jrxml"));
         JasperReport jreport = JasperCompileManager.compileReport(jdesign);
-        // Llenar el informe
         try (Connection conn = dataSource.getConnection()) {
             return JasperFillManager.fillReport(jreport, param, conn);
         }
@@ -73,13 +71,10 @@ public class VentaServiceImp extends CrudGenericoServiceImp<Venta, Long> impleme
     public JasperPrint runReportVentas(String fInicio, String ffinal) throws
             JRException, SQLException {
         HashMap<String, Object> param = new HashMap<>();
-        // Obtener ruta de la imagen
         String imgen = getFile("logoupeu.png").getAbsolutePath();
-        // Agregar parÃ¡metros
         param.put("fechaI", fInicio);
         param.put("imagenurl", imgen);
         param.put("fechaF", ffinal);
-        // Cargar el diseÃ±o del informe
         JasperDesign jdesign =
                 JRXmlLoader.load(getFile("reporte_ventas.jrxml"));
         JasperReport jreport = JasperCompileManager.compileReport(jdesign);

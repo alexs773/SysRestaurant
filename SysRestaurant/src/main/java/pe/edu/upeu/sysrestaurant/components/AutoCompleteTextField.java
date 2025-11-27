@@ -22,7 +22,6 @@ public class AutoCompleteTextField<T>{
     public AutoCompleteTextField(SortedSet<T> entries, TextField autTF) {
         this.entries = entries;
         this.autoCompleteTextField=autTF;
-        //this.autoCompleteTextField.setOnKeyReleased(this::handleKeyReleased);
         this.autoCompleteTextField.setOnKeyTyped(this::handleKeyReleased);
     }
 
@@ -30,19 +29,14 @@ public class AutoCompleteTextField<T>{
         acccion();
     }
 
-    // MÃ©todo para manejar clics del mouse
-
-
     public void acccion(){
         ObservableList<MenuItem> menuItems = FXCollections.observableArrayList();
         String input = this.autoCompleteTextField.getText().toLowerCase();
 
-        // Filtro de elementos que coinciden con la entrada
         entries.stream()
                 .filter(e -> e.toString().toLowerCase().contains(input))
                 .forEach(entry -> {
                     MenuItem item = new MenuItem(entry.toString());
-                    //vbox.getChildren().add(new Button(item.getText()));
                     item.setOnAction(e -> {
                         this.autoCompleteTextField.setText(entry.toString());
                         lastSelectedObject = entry;
@@ -52,11 +46,6 @@ public class AutoCompleteTextField<T>{
                     menuItems.add(item);
                     entryMenu.hide();
                 });
-        /*ScrollPane scrollPane = new ScrollPane(vbox);
-        scrollPane.setPrefHeight(150); // Altura del Ã¡rea de scroll
-        scrollPane.setFitToWidth(true);
-        CustomMenuItem scrollableItem = new CustomMenuItem(scrollPane, false);
-        entryMenu.getItems().setAll(scrollableItem);*/
         entryMenu.getItems().setAll(menuItems);
         if (!menuItems.isEmpty()) {
             entryMenu.show(this.autoCompleteTextField, Side.BOTTOM, 0, 0);

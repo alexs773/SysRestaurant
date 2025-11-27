@@ -28,6 +28,9 @@ import pe.edu.upeu.sysrestaurant.service.*;
 import pe.edu.upeu.sysrestaurant.utils.ConsultaDNI;
 import pe.edu.upeu.sysrestaurant.utils.PrinterManager;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.print.PrintService;
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -37,6 +40,8 @@ import java.util.function.Consumer;
 
 @Controller
 public class VentaController {
+
+    private static final Logger logger = LoggerFactory.getLogger(VentaController.class);
     @FXML
     TextField autocompCliente, dniRuc, razonSocial, txtDireccion,
             autocompComida, nombreComida, codigoComida, stockComida, cantidadComida, precioComida, preTComida,
@@ -130,10 +135,10 @@ public class VentaController {
             razonSocial.setText(p.getNombre()+" "+p.getApellidoPaterno()+" "+p.getApellidoMaterno());
             dniRuc.setText(p.getDni());
             btnRegCliente.setDisable(false);
-            Toast.showToast(stage, "El cliente se encontrÃ³ en RENIEC para registrar debe hacer clic en Add ", 2000, with, 50);
+            Toast.showToast(stage, "El cliente se encontró en RENIEC para registrar debe hacer clic en Add ", 2000, with, 50);
         }else{
             btnRegCliente.setDisable(true);
-            Toast.showToast(stage, "El cliente no se encontrÃ³ en RENIEC y debe registrar a travÃ©s del formulario de cliente", 2000, with, 50);
+            Toast.showToast(stage, "El cliente no se encontró en RENIEC y debe registrar a través del formulario de cliente", 2000, with, 50);
         }
     }
 
@@ -163,9 +168,9 @@ public class VentaController {
 
     public void deleteReg(PedidoCarrito obj){
         Alert alert=new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("ConfirmaciÃ³n");
-        alert.setHeaderText("Confirmar acciÃ³n");
-        alert.setContentText("Â¿Estas seguro de eliminar el registro?");
+        alert.setTitle("Confirmación");
+        alert.setHeaderText("Confirmar acción");
+        alert.setContentText("¿Estás seguro de eliminar el registro?");
         Optional<ButtonType> result=alert.showAndWait();
         if(result.isPresent() && result.get()==ButtonType.OK){
             daoC.deleteById(obj.getIdCarrito());
@@ -185,7 +190,7 @@ public class VentaController {
         columns.put("P. Total", new ColumnInfo("ptotal", 100.0));
 
         Consumer<PedidoCarrito> updateAction=(PedidoCarrito pedidoCarrito) ->{
-            System.out.println("Actualizar: "+pedidoCarrito);
+            logger.debug("Actualizar pedido carrito: {}", pedidoCarrito);
         };
 
         Consumer<PedidoCarrito> deleteAction=(PedidoCarrito pedidoCarrito) ->{
@@ -291,8 +296,12 @@ public class VentaController {
             daoC.save(pc);
             listar();
             listarComida();
+            Toast.showToast(stageLocal, "Producto agregado al carrito", 2000, width, 50);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            logger.error("Error al registrar en carrito", e);
+            Stage stageError = StageManager.getPrimaryStage();
+            double widthError = stageError.getMaxWidth() / 2;
+            Toast.showToast(stageError, "Error al agregar producto al carrito", 2000, widthError, 50);
         }
     }
 
@@ -349,7 +358,10 @@ public class VentaController {
             });
             print(idx.getIdVenta());
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            logger.error("Error al registrar venta o generar reporte", e);
+            Stage stageLocal = StageManager.getPrimaryStage();
+            double width = stageLocal.getMaxWidth() / 2;
+            Toast.showToast(stageLocal, "Error al procesar la venta", 2000, width, 50);
         }
     }
 
@@ -375,13 +387,11 @@ public class VentaController {
             escpos.writeLF(center, "RUC: 12345678901");
             escpos.writeLF(center, "Av. Principal 123 - Lima");
             escpos.writeLF(center, "--------------------------------");
-            //Datos del cliente
             escpos.writeLF(normal, "Cliente: " + vt.getCliente().getNombres());
             escpos.writeLF(normal, "DNI: " + vt.getCliente().getDniruc());
             escpos.writeLF(normal, "Fecha: " + vt.getFechaGener() + "");
             escpos.writeLF(normal, "--------------------------------");
-            //Detalle
-            escpos.writeLF(normal, "Cant DescripciÃ³n Importe");
+            escpos.writeLF(normal, "Cant Descripción Importe");
             for (VentaDetalle vd : vt.getVentaDetalles()) {
                 String punit = vd.getCantidad() + " " + vd.getComida().getNombre() + " S/ " + vd.getSubtotal() + "";
                 escpos.writeLF(normal, punit);
@@ -389,7 +399,6 @@ public class VentaController {
             escpos.writeLF(normal, "--------------------------------");
             escpos.writeLF(normal, "TOTAL: S/" + vt.getPrecioTotal() + "");
             escpos.writeLF(normal, "--------------------------------");
-            //Agregar QR con los datos principales
             String qrData = "Boleta NÂ°001-000123 | Total: S/ " + vt.getPrecioTotal() + " | Fecha: " + vt.getFechaGener();
             QRCode qrCode = new QRCode()
                     .setJustification(EscPosConst.Justification.Center)
@@ -399,13 +408,14 @@ public class VentaController {
             escpos.feed(2);
             escpos.writeLF(center, "Gracias por su compra!");
             escpos.feed(6);
-            //Corte total
             escpos.cut(EscPos.CutMode.FULL);
             escpos.close();
-            System.out.println("Boleta impresa correctamente.");
-            System.out.println("ImpresiÃ³n completada correctamente.");
+            logger.info("Boleta impresa correctamente para venta ID: {}", idv);
         } catch (IOException e) {
-            System.err.println("Error al inicializar la impresora: " + e.getMessage());
+            logger.error("Error al inicializar la impresora", e);
+            Stage stageLocal = StageManager.getPrimaryStage();
+            double width = stageLocal.getMaxWidth() / 2;
+            Toast.showToast(stageLocal, "Error al imprimir boleta", 2000, width, 50);
         }
     }
 

@@ -1,10 +1,14 @@
 package pe.edu.upeu.sysrestaurant.utils;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.print.PrintService;
 import com.github.anastaciocintra.output.PrinterOutputStream;
 import java.io.IOException;
 
 public class PrinterManager {
+    private static final Logger logger = LoggerFactory.getLogger(PrinterManager.class);
     private static PrinterManager instance;
     private PrintService printService;
     private String printerNameR = "pos-80-series";
@@ -22,10 +26,7 @@ public class PrinterManager {
 
     private void initializePrinter() throws IOException {
         String[] printerNames = PrinterOutputStream.getListPrintServicesNames();
-        System.out.println("Impresoras disponibles:");
-        for (String printerName : printerNames) {
-            System.out.println(" - " + printerName);
-        }
+        logger.debug("Impresoras disponibles: {}", (Object) printerNames);
         String targetPrinter = null;
         for (String printerName : printerNames) {
             if (printerName.toLowerCase().contains(printerNameR.toLowerCase())) {
@@ -36,7 +37,7 @@ public class PrinterManager {
         if (targetPrinter == null) {
             throw new IOException("No se encontro ninguna impresora 'POS-80-Series'.");
         }
-        System.out.println("Impresora seleccionada: " + targetPrinter);
+        logger.info("Impresora seleccionada: {}", targetPrinter);
         this.printService = PrinterOutputStream.getPrintServiceByName(targetPrinter);
     }
 

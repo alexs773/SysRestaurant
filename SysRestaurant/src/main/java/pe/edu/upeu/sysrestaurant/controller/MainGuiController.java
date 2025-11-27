@@ -11,6 +11,8 @@ import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Lazy;
@@ -29,6 +31,8 @@ import java.util.prefs.Preferences;
 @Controller
 @Lazy
 public class MainGuiController {
+
+    private static final Logger logger = LoggerFactory.getLogger(MainGuiController.class);
 
     @Autowired
     private ApplicationContext context;
@@ -64,7 +68,7 @@ public class MainGuiController {
     private Menu menuIdioma=new Menu("Idioma");
     ComboBox<String> comboBoxIdioma = new ComboBox<>(
             javafx.collections.FXCollections.observableArrayList(
-                    "EspaÃ±ol",
+                    "Español",
                     "Ingles", "Frances"
             ) );
     CustomMenuItem customItemIdioma = new CustomMenuItem(comboBoxIdioma);
@@ -73,7 +77,7 @@ public class MainGuiController {
     public void initialize() {
         Platform.runLater(() -> {
             stage = (Stage) tabPaneFx.getScene().getWindow();
-            System.out.println("El tÃ­tulo del stage es: " + stage.getTitle());
+            logger.debug("Stage inicializado: {}", stage.getTitle());
         });
         graficarMenus();
         actualizarBienvenida();
@@ -83,7 +87,7 @@ public class MainGuiController {
     class MenuListener{
         public void menuSelected(Event e){
             if (((Menu) e.getSource()).getId().equals("mmiver1")) {
-                System.out.println("llego help");
+                logger.debug("Menú de ayuda seleccionado");
             }
         }
     }
@@ -97,7 +101,7 @@ public class MainGuiController {
 
         public void handle(ActionEvent e){
             String id = ((MenuItem) e.getSource()).getId();
-            System.out.println("Menu seleccionado: " + id);
+            logger.debug("Menú seleccionado: {}", id);
             if (menuConfig.containsKey(id)) {
                 String[] cfg = menuConfig.get(id);
                 if(cfg[2].equals("S") ){
@@ -110,16 +114,17 @@ public class MainGuiController {
         private void abrirTabConFXML(String fxmlPath, String tituloTab) {
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
-                loader.setControllerFactory(context::getBean); // InyecciÃ³n con Spring
+                loader.setControllerFactory(context::getBean);
                 Parent root = loader.load();
                 ScrollPane scrollPane = new ScrollPane(root);
                 scrollPane.setFitToWidth(true);
                 scrollPane.setFitToHeight(true);
                 Tab newTab = new Tab(tituloTab, scrollPane);
-                tabPaneFx.getTabs().clear(); // si quieres siempre limpiar
+                tabPaneFx.getTabs().clear();
                 tabPaneFx.getTabs().add(newTab);
                 actualizarBienvenida();
             } catch (IOException e) {
+                logger.error("Error al cargar FXML: {}", fxmlPath, e);
                 throw new RuntimeException("Error al cargar FXML: " + fxmlPath, e);
             }
         }
@@ -140,7 +145,8 @@ public class MainGuiController {
                 stage.setResizable(false);
                 stage.show();
             }catch (Exception ex){
-                throw new RuntimeException(ex);
+                logger.error("Error al redirigir a: {}", fxmlPath, ex);
+                throw new RuntimeException("Error al redirigir", ex);
             }
         }
     }
@@ -247,12 +253,12 @@ public class MainGuiController {
         String idiomaSeleccionado =
                 comboBoxIdioma.getSelectionModel().getSelectedItem();
         switch (idiomaSeleccionado) {
-            case "EspaÃ±ol": userPrefs.put("IDIOMAX", "es"); break;
+            case "Español": userPrefs.put("IDIOMAX", "es"); break;
             case "Ingles": userPrefs.put("IDIOMAX", "en"); break;
             case "Frances": userPrefs.put("IDIOMAX", "fr"); break;
             default: userPrefs.put("IDIOMAX", "es"); break;
         }
-        System.out.println("Cambiando idioma a: " + idiomaSeleccionado);
+        logger.info("Cambiando idioma a: {}", idiomaSeleccionado);
         graficarMenus();
     }
 

@@ -18,7 +18,6 @@ public class RestApplication extends Application {
 
 
 	public static void main(String[] args) {
-		//SpringApplication.run(SysVentasApplication.class, args);
 		launch(args);
 	}
 

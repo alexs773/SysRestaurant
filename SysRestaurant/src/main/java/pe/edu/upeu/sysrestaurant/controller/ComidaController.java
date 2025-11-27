@@ -14,6 +14,8 @@ import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import pe.edu.upeu.sysrestaurant.components.ColumnInfo;
@@ -28,6 +30,8 @@ import java.util.stream.Collectors;
 
 @Controller
 public class ComidaController {
+
+    private static final Logger logger = LoggerFactory.getLogger(ComidaController.class);
 
     @FXML
     TextField txtNombreComida, txtPrecio, txtStock, txtDescripcion, txtFiltroDato;
@@ -86,7 +90,7 @@ public class ComidaController {
                 filtrarComidas(newValue);
             });
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            logger.error("Error al listar comidas", e);
         }
     }
 
@@ -96,9 +100,7 @@ public class ComidaController {
                 event -> {
                     stage = (Stage) miContenedor.getScene().getWindow();
                     if (stage != null) {
-                        System.out.println("El tÃ­tulo del stage es: " + stage.getTitle());
-                    } else {
-                        System.out.println("Stage aÃºn no disponible.");
+                        logger.debug("Stage inicializado: {}", stage.getTitle());
                     }
                 }));
         timeline.setCycleCount(1);
@@ -113,19 +115,19 @@ public class ComidaController {
         columns.put("Precio", new ColumnInfo("precio", 100.0));
         columns.put("Stock", new ColumnInfo("stock", 80.0));
         columns.put("Disponible", new ColumnInfo("disponible", 80.0));
-        columns.put("DescripciÃ³n", new ColumnInfo("descripcion", 200.0));
+        columns.put("Descripción", new ColumnInfo("descripcion", 200.0));
         
         Consumer<Comida> updateAction = (Comida comida) -> {
-            System.out.println("Actualizar: " + comida);
+            logger.debug("Actualizar comida: {}", comida);
             editForm(comida);
         };
 
         Consumer<Comida> deleteAction = (Comida comida) -> {
-            System.out.println("Eliminar: " + comida);
+            logger.debug("Eliminar comida: {}", comida);
             comidaService.delete(comida.getIdComida());
             double with = stage.getWidth() / 1.5;
             double h = stage.getHeight() / 2;
-            Toast.showToast(stage, "Se eliminÃ³ correctamente!!", 2000, with, h);
+            Toast.showToast(stage, "Se eliminó correctamente!!", 2000, with, h);
             listar();
         };
         
@@ -206,7 +208,7 @@ public class ComidaController {
     }
 
     private void procesarFormulario() {
-        lbnMsg.setText("Formulario vÃ¡lido");
+        lbnMsg.setText("Formulario válido");
         lbnMsg.setStyle("-fx-text-fill: green; -fx-font-size: 16px;");
         limpiarError();
         double width = stage.getWidth() / 1.5;
@@ -214,10 +216,10 @@ public class ComidaController {
         if (idComidaCE > 0L) {
             formulario.setIdComida(idComidaCE);
             comidaService.update(formulario);
-            Toast.showToast(stage, "Se actualizÃ³ correctamente!!", 2000, width, height);
+            Toast.showToast(stage, "Se actualizó correctamente!!", 2000, width, height);
         } else {
             comidaService.save(formulario);
-            Toast.showToast(stage, "Se guardÃ³ correctamente!!", 2000, width, height);
+            Toast.showToast(stage, "Se guardó correctamente!!", 2000, width, height);
         }
         clearForm();
         listar();

@@ -22,7 +22,6 @@ public class TableViewHelper<T> {
             TableColumn<T, Object> column = new TableColumn<>(entry.getKey());
             String field = entry.getValue().getField();
 
-            // Detectar si el campo es un objeto complejo o una propiedad bÃ¡sica
             if (field.contains(".")) {
 
                 column.setCellValueFactory(cellData -> {
@@ -54,7 +53,6 @@ public class TableViewHelper<T> {
         }
 
         addActionColumn(tableView, updateAction, deleteAction);
-        // Ajustar el ancho del TableView segÃºn el contenido
         tableView.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
     }
 
@@ -66,30 +64,24 @@ public class TableViewHelper<T> {
             public TableCell<T, Void> call(final TableColumn<T, Void> param) {
                 final TableCell<T, Void> cell = new TableCell<>() {
 
-                    // Crear las imÃ¡genes
                     Image updateImage = new Image(getClass().getResource("/img/document-edit-icon.png").toExternalForm());
                     Image deleteImage = new Image(getClass().getResource("/img/del-icon.png").toExternalForm());
 
-                    // Crear ImageView para los botones
                     ImageView updateImageView = new ImageView(updateImage);
                     ImageView deleteImageView = new ImageView(deleteImage);
 
-
-
-                    // Crear botones con los Ã­conos en lugar de texto
                     private final Button btnUpdate = new Button("", updateImageView);
                     private final Button btnDelete = new Button("", deleteImageView);
-
 
                     {
                         btnUpdate.setOnAction(event -> {
                             T data = getTableView().getItems().get(getIndex());
-                            updateAction.accept(data);  // Llama a la funciÃ³n pasada como parÃ¡metro para actualizar
+                            updateAction.accept(data);
                         });
 
                         btnDelete.setOnAction(event -> {
                             T data = getTableView().getItems().get(getIndex());
-                            deleteAction.accept(data);  // Llama a la funciÃ³n pasada como parÃ¡metro para eliminar
+                            deleteAction.accept(data);
                         });
                     }
 

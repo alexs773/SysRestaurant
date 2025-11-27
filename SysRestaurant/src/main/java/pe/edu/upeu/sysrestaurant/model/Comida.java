@@ -27,7 +27,7 @@ public class Comida {
     @Column(name = "id_comida")
     private Long idComida;
     
-    @NotNull(message = "El nombre no puede estar vacÃ­o")
+    @NotNull(message = "El nombre no puede estar vacío")
     @Size(min = 2, max = 120, message = "El nombre debe tener entre 2 y 120 caracteres")
     @Column(name = "nombre", nullable = false, length = 120)
     private String nombre;

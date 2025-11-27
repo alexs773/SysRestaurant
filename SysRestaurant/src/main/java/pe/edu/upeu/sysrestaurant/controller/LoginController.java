@@ -14,9 +14,10 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import pe.edu.upeu.sysrestaurant.components.StageManager;
 import pe.edu.upeu.sysrestaurant.components.Toast;
@@ -27,13 +28,14 @@ import pe.edu.upeu.sysrestaurant.service.IUsuarioService;
 import java.io.IOException;
 
 @Controller
-//@Component
 public class LoginController {
+
+    private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
 
     @Autowired
     private ApplicationContext context;
     @Autowired
-    IUsuarioService us;
+    private IUsuarioService us;
     @FXML
     TextField txtUsuario;
     @FXML
@@ -53,7 +55,7 @@ public class LoginController {
     @FXML
     public void login(ActionEvent event) throws IOException {
         try {
-            Usuario usu=us.loginUsuario(txtUsuario.getText(), new String(txtClave.getText()));
+            Usuario usu = us.loginUsuario(txtUsuario.getText(), txtClave.getText());
             if (usu!=null) {
                 SessionManager.getInstance().setUserId(usu.getIdUsuario());
                 SessionManager.getInstance().setUserName(usu.getUser());
@@ -80,13 +82,14 @@ public class LoginController {
             } else {
                 Stage stage = (Stage) ((Node)
                         event.getSource()).getScene().getWindow();
-                double with=stage.getWidth()*2;
-                double h=stage.getHeight()/2;
-                System.out.println(with + " h:"+h);
+                double with = stage.getWidth() * 2;
+                double h = stage.getHeight() / 2;
                 Toast.showToast(stage, "Credencial invalido!! intente nuevamente", 2000, with, h);
             }
-        }catch (Exception e){
-            System.out.println(e.getMessage());
+        } catch (Exception e) {
+            logger.error("Error durante el login", e);
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Toast.showToast(stage, "Error al iniciar sesión", 2000, stage.getWidth() / 2, stage.getHeight() / 2);
         }
     }
 

@@ -14,9 +14,8 @@ public class MenuMenuItemDaoImp implements IMenuMenuItemDao {
         List<MenuMenuItenTO> lista = new ArrayList<>();
 
         lista.add(new MenuMenuItenTO("miprincipal", "/view/login.fxml", idioma.getProperty("menu.nombre.principal"), idioma.getProperty("menuitem.nombre.salir"), "Salir", "S"));
-        lista.add(new MenuMenuItenTO("micomida", "/view/main_comida.fxml", "Restaurante", "GestiÃ³n Comidas", "Gestionar Comidas", "T"));
+        lista.add(new MenuMenuItenTO("micomida", "/view/main_comida.fxml", "Restaurante", "Gestión Comidas", "Gestionar Comidas", "T"));
         lista.add(new MenuMenuItenTO("mipedido", "/view/main_venta.fxml", "Restaurante", "Reg. Pedido", "Gestionar Pedidos", "T"));
-        lista.add(new MenuMenuItenTO("mireporte", "/view/main_reporte.fxml", "Restaurante", "Reportes", "Gestionar Reportes", "T"));
 
         List<MenuMenuItenTO> accesoReal = new ArrayList<>();
 
@@ -29,7 +28,6 @@ public class MenuMenuItemDaoImp implements IMenuMenuItemDao {
             case "administrador":
                 accesoReal.add(lista.get(1)); // Comidas
                 accesoReal.add(lista.get(2)); // Pedidos
-                accesoReal.add(lista.get(3)); // Reportes
                 break;
             case "cocinero":
                 accesoReal.add(lista.get(1)); // Solo Comidas

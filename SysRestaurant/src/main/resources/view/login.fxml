@@ -52,7 +52,7 @@
                 </VBox>
 
                 <VBox spacing="6">
-                    <Label text="ContraseÃ±a" textFill="#f8f8f8">
+                    <Label text="Contraseña" textFill="#f8f8f8">
                         <font>
                             <Font size="14" />
                         </font>
